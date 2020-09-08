@@ -1,25 +1,27 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Buy
+    Expense
 {% endblock %}
 
 {% block main %}
-    <form action="/buy" method="post">
+    <form action="/expense" method="post">
         <div class="form-group">
             <select name="category">
-                <option value="academics">Academics</option>
+                <option value="item1" disabled selected="true">Select Category</option>
                 <option value="food">Food</option>
                 <option value="clothes">Clothes</option>
                 <option value="transport">Transportation</option>
                 <option value="misc">Miscellaneous Expenses</option>
             </select>
         </div>
+
+
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="quantity" placeholder="Quantity" type="number" min="1" required />
+            <input autocomplete="off" autofocus class="form-control" name="amount" placeholder="Amount" type="number" min="1" required />
         </div>
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="amt_per_qty" placeholder="Amount per Quantity" type="number" min="1" required />
+            <input autocomplete="off" autofocus class="form-control" name="description" placeholder="Desctiption" />
         </div>
         <button class="btn btn-primary" type="submit">Submit</button>
     </form>

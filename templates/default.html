@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Default Expenses
+{% endblock %}
+
+{% block main %}
+    <form action="/default" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="amount" placeholder="Amount" type="number" min="1" required />
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="unit" placeholder="Unit"  required />
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="amount" placeholder="Amount" type="number" min="1" required />
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="amount" placeholder="Amount" type="number" min="1" required />
+        </div>
+        <button class="btn btn-danger" type="submit">Edit</button>
+    </form>
+{% endblock %}

@@ -161,9 +161,9 @@ def change_password():
 
     return render_template("change_password.html")
 
-@app.route("/buy", methods=["GET", "POST"])
+@app.route("/expense", methods=["GET", "POST"])
 @login_required
-def buy():
+def expense():
     """Bought an item (Input amount)"""
     if request.method == "POST":
         #quote = lookup(request.form.get("symbol"))
@@ -207,17 +207,17 @@ def buy():
 
         flash("Done!")
 
-        return redirect("/buy")
+        return redirect("/expense")
 
     else:
-        return render_template("buy.html")
+        return render_template("expense.html")
 
 
 
 
-@app.route("/edit", methods=["GET", "POST"])
+@app.route("/default", methods=["GET", "POST"])
 @login_required
-def edit():
+def default():
     """Edit user's transactions"""
     if request.method == "POST":
 
@@ -263,13 +263,13 @@ def edit():
 
         flash("Edited!")
 
-        return redirect("/edit")
+        return redirect("/default")
 
     else:
         qtys = db.execute(
             "SELECT category, SUM(quantity) as total_qty FROM transactions WHERE user_id = :user_id GROUP BY category HAVING total_qty > 0", user_id=session["user_id"])
 
-        return render_template("edit.html", qtys=qtys)
+        return render_template("default.html", qtys=qtys)
 
 
 
