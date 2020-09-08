@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Edit
+{% endblock %}
+
+{% block main %}
+    <form action="/edit" method="post">
+        <div class="form-group">
+            <select class="form-control" name="category" required>
+                <option disabled selected value>Category</option>
+
+                {% for qty in qtys %}
+                    <option value="{{ qty.category }}" data-total-shares="{{ qty.total_qty }}">{{ qty.category }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="quantity" placeholder="Quantity" type="number" min="1" required />
+        </div>
+        <button class="btn btn-danger" type="submit">Edit</button>
+    </form>
+{% endblock %}

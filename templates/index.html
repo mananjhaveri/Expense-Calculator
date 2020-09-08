@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Portfolio
+{% endblock %}
+
+{% block main %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>TOTAL</th>
+            </tr>
+        </thead>
+
+        <tfoot>
+            <tr>
+                <td colspan="3"></td>
+                <td> <b>{{ cash_remaining | usd }}</b></td>
+            </tr>
+        </tfoot>
+
+        <tbody>
+            {% for qty in qtys %}
+                <tr>
+                    <td>{{ qty.category }}</td>
+                    <td>{{ qty.total_qty }}</td>
+                    <td>{{ (qty.amt_per_qty * qty.total_qty) | abs | usd }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Analysis
+{% endblock %}
+
+{% block main %}
+
+    {% for qty in qtys %}
+        {% set width_1 = (((qty.amt_per_qty * qty.total_qty) - qty.amt_per_qty) / (qty.amt_per_qty * qty.total_qty)) * 100 %}
+        <p> {{ qty.category }} </p>
+        <div class="container">
+            <div class="skills {{qty.category}}">{{ width_1 }} {% print("%") %}</div>
+        </div>
+        <style>
+            /* Make sure that padding behaves as expected */
+            {box-sizing:border-box}
+
+            /* Container for skill bars */
+            .container {
+              width: 100%; /* Full width */
+              background-color: #ddd; /* Grey background */
+            }
+
+            .skills {
+              text-align: right; /* Right-align text */
+              padding-top: 10px; /* Add top padding */
+              padding-bottom: 10px; /* Add bottom padding */
+              color: white; /* White text color */
+            }
+
+            .food {width: {{ width_1 }}; background-color: #4CAF50;} /* Green */
+            .clothes {width: {{ width_1 }}; background-color: #2196F3;} /* Blue */
+            .academics {width: {{ width_1 }}; background-color: #f44336;} /* Red */
+            .transport {width: {{ width_1 }}; background-color: #808080;} /* Dark Grey */
+            .misc {width: {{ width_1 }}; background-color: ##FFFF00;} /* Yellow */
+        </style>
+    {% endfor %}
+{% endblock %}
