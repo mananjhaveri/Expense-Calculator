@@ -33,14 +33,14 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///budgeting.db")
+db = SQL("sqlite:///familyexpenses.db")
 
 
 @app.route("/")
 @login_required
 def index():
     """Show portfolio of user"""
-    users = db.execute("SELECT cash FROM users WHERE id = :user_id", user_id=session["user_id"])
+    users = db.execute("SELECT total FROM family WHERE family_id = :user_id", user_id=session["user_id"])
     qtys = db.execute(
         "SELECT category, SUM(quantity) as total_qty, amt_per_qty FROM transactions WHERE user_id = :user_id GROUP BY category HAVING total_qty > 0", user_id=session["user_id"])
 
@@ -69,15 +69,15 @@ def login():
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = :username",
+        rows = db.execute("SELECT * FROM family WHERE username = :username",
                           username=request.form.get("username"))
 
         # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+        if len(rows) != 1 or not check_password_hash(rows[0]["passcode"], request.form.get("password")):
             return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
+        session["user_id"] = rows[0]["family_id"]
 
         # Redirect user to home page
         return redirect("/")
@@ -103,7 +103,7 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     else:
-        rows = db.execute("SELECT * from users where username = :username",
+        rows = db.execute("SELECT * from family where username = :username",
         username = request.form.get("username"))
 
         if len(rows) == 1 or not request.form.get("username"):
@@ -118,7 +118,7 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)", username=username, hash=generate_password_hash(password))
+        db.execute("INSERT INTO family (username, passcode) VALUES (:username, :passcode)", username=username, passcode=generate_password_hash(password))
 
         return redirect("/")
 
