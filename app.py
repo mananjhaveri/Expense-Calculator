@@ -61,20 +61,20 @@ def login():
     if request.method == "POST":
 
         # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 403)
+        if not request.form.get("familyname"):
+            return apology("must provide familyname", 403)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM family WHERE username = :username",
-                          username=request.form.get("username"))
+        rows = db.execute("SELECT * FROM family WHERE familyname = :familyname",
+                          familyname=request.form.get("familyname"))
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["passcode"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            return apology("invalid familyname and/or password", 403)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["family_id"]
@@ -103,11 +103,11 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     else:
-        rows = db.execute("SELECT * from family where username = :username",
-        username = request.form.get("username"))
-
-        if len(rows) == 1 or not request.form.get("username"):
-            return apology("Username invalid!")
+        rows = db.execute("SELECT * from family where familyname = :familyname",
+        familyname = request.form.get("familyname"))
+        print(request.form.get("familyname"))
+        if len(rows) == 1 or not request.form.get("familyname"):
+            return apology("Family name invalid!")
 
         elif not request.form.get("password"):
             return apology("Please enter password!")
@@ -115,10 +115,22 @@ def register():
         elif request.form.get("password") != request.form.get("password(again)"):
             return apology("The two passwords do not match!")
 
-        username = request.form.get("username")
+        familyname = request.form.get("familyname")
         password = request.form.get("password")
 
-        db.execute("INSERT INTO family (username, passcode) VALUES (:username, :passcode)", username=username, passcode=generate_password_hash(password))
+        user_names = [request.form.get("user1"), request.form.get("user2"), request.form.get("user3"), request.form.get("user4")]
+        n_users = 0
+        for user in user_names:
+            if len(user) > 1:
+                 n_users += 1
+
+
+        db.execute("INSERT INTO family (familyname, passcode, total, n_users) VALUES (:familyname, :passcode, :total, :n_users)", familyname=familyname, passcode=generate_password_hash(password), total=0, n_users=n_users)
+
+        for user in user_names:
+            if len(user) > 1:
+                db.execute("INSERT INTO users (family_id, user_name) VALUES (:family_id, :user_name)", family_id=session["user_id"], user_name=user)
+
 
         return redirect("/")
 
@@ -134,10 +146,10 @@ def change_password():
             return apology("must provide current password", 400)
 
         # Query database for user_id
-        rows = db.execute("SELECT hash FROM users WHERE id = :user_id", user_id=session["user_id"])
+        rows = db.execute("SELECT passcode FROM family WHERE family_id = :family_id", family_id=session["user_id"])
 
         # Ensure current password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("current_password")):
+        if len(rows) != 1 or not check_password_hash(rows[0]["passcode"], request.form.get("current_password")):
             return apology("invalid password", 400)
 
         # Ensure new password is not empty
@@ -154,7 +166,7 @@ def change_password():
 
         # Update database
         hash = generate_password_hash(request.form.get("new_password"))
-        rows = db.execute("UPDATE users SET hash = :hash WHERE id = :user_id", user_id=session["user_id"], hash=hash)
+        rows = db.execute("UPDATE users SET passcode = :passcode WHERE family_id = :family_id", family_id=session["user_id"], passcode=passcode)
 
         # Show flash
         flash("Changed!")

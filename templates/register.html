@@ -7,7 +7,7 @@
 {% block main %}
     <form action="/register" method="post">
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
+            <input autocomplete="off" autofocus class="form-control" name="familyname" placeholder="Family name" type="text">
         </div>
         <div class="form-group">
             <input class="form-control" name="password" placeholder="Password" type="password">
@@ -15,6 +15,19 @@
         <div class="form-group">
             <input class="form-control" name="password(again)" placeholder="Confirm Password" type="password">
         </div>
+        <div class="form-group">
+            <input class="form-control" name="user1" placeholder="User 1's name" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="user2" placeholder="User 2's name" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="user3" placeholder="User 3's name" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="user4" placeholder="User 4's name" type="text">
+        </div>
+
         <button class="btn btn-primary" type="submit">Submit</button>
     </form>
 {% endblock %}
